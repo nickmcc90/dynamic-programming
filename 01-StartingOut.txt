@@ -1,0 +1,73 @@
+-----Fib memoization----
+
+Write a function fib(n) that takes in a number as an argument. The function should return the n-th number
+of the Fibonacci sequence.
+
+The recursive code would be:
+
+int fib(int n) {
+  if(n <= 2) return 1;
+  return fib(n-1) + fib(n-2);
+}
+
+This code works for small numbers, but takes quite a bit of time with big numbers...
+
+How can we even make this code better?
+
+______
+Aside: Students should work on this. Learn to draw out all the information
+given to you with a drawing for complex problems instead of trying to do it
+all in your head.
+------
+
+Let's start by visualizing putting the number seven into the fib function.
+Drawing out the entire tree, we can make mini paths until we have only 1's
+and 2's. We have reduced the number 7 into only base cases. Then we return
+all the answers through the tree to get 13 for 7 in the function.
+
+How can we understand the time complexity of this being 2^n? Let's talk about time and space complexity really quick.
+
+When making a bunch of recursive calls, we should include any stack space
+that our function calls take up. When we make a recursive call, we add that
+to the call stack which get tracked by the computer.
+
+When measuring time complexity, and multiplicative numbers in the calculation
+are constants, and don't need to be there.
+
+Ex: Javascript..
+const dib (n) => {
+  if (n <= 1) return;
+  dib(n - 1);                         Whats the time complexity of this function?
+  dib(n - 1);
+}   
+Let's say n is 5
+
+Well, if we look at the full tree, its height is n. Its height is given by the length from the top
+(5) to the bottom (1). The number of levels is also n. Levels are nodes in the tree that are at
+the same height. At the first level, we have one node. Then at the next level, we have two
+nodes. For each level we traverse, we double the nodes. For the height of the tree, we
+double these nodes n times.
+So this function has a O(2^n) time complexity.
+
+What about space? It's not always the same as time.
+
+Since space can be taken by function calls, the computer never calls a function more than n times
+due to the bottom of the tree returning at the base case. O(n) space.
+
+Comparing this to the fib function, it's time and space complexity are the same:
+O(2^n) and O(n). Seeing this, calling fib(50) would take 2^50 steps.
+
+
+Now, let's look at the fib(7) tree again. Can we notice any patterns in the tree?
+Well, the function calculates fib(3) 5 times across the tree. The same with fib(4),
+mulitple times. What if we could reuse these calculations to get rid of these
+patterns? We can. And we know that if we draw trees in the future that have duplicate
+paths, we can optimize it.
+
+const fib = (n, memo = {}) => {
+  if(n in memo) return memo[n];   // if we are in the middle of recursion, we should check if our current argument is inside of memo, so that we can return things that we've seen before.
+  if(n <= 2) return 1;
+  memo[n] = fib(n-1) + fib(n-2);    // saving our og return statement in memo based on our key.
+  return memo[n];                   // we return our initial value, using it as a key in our memo dict and getting the value.
+}
+<timestamp: 30:12>
