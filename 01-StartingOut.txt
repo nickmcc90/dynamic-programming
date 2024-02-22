@@ -29,10 +29,10 @@ How can we understand the time complexity of this being 2^n? Let's talk about ti
 
 When making a bunch of recursive calls, we should include any stack space
 that our function calls take up. When we make a recursive call, we add that
-to the call stack which get tracked by the computer.
+to the call stack which gets tracked by the computer.
 
-When measuring time complexity, and multiplicative numbers in the calculation
-are constants, and don't need to be there.
+When measuring time complexity, multiplicative numbers in the calculation
+are constants and don't need to be there.
 
 Ex: Javascript..
 const dib (n) => {
@@ -67,7 +67,12 @@ paths, we can optimize it.
 const fib = (n, memo = {}) => {
   if(n in memo) return memo[n];   // if we are in the middle of recursion, we should check if our current argument is inside of memo, so that we can return things that we've seen before.
   if(n <= 2) return 1;
-  memo[n] = fib(n-1) + fib(n-2);    // saving our og return statement in memo based on our key.
+  memo[n] = fib(n-1, memo) + fib(n-2, memo);    // saving our og return statement in memo based on our key.
   return memo[n];                   // we return our initial value, using it as a key in our memo dict and getting the value.
 }
 <timestamp: 30:12>
+
+So, when making a recursive call, we save our recursive function call to a value within an array. We
+return that value, or otherwise the function call. A base case to stop the function from solving
+sub problems that we already know is to see if our current value is equal to a value we've saved in the
+array.
